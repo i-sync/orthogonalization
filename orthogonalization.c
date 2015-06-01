@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 void main()
 {
@@ -7,14 +8,14 @@ void main()
 	int s,n;//s个n维向量组
 	int groupNum=0;//极大线性无关组个数
 	double **array,**deterArray;
-	double **groupArray,**result;
+	double **result;
 	int *groupPosition;
 	
 	void printfDouble2Dimension(int s, int n, double **array);
 	void printfInt1Dimension(int n, int *array);	
 	void primaryRowChange(int s, int n, double **array);
 	int getGreatLinerlyIndependentGroup(int s, int n, double **array, int *result);
-	void calcOrthogonalization(int s, int n, double **array, double **result);
+	void calcOrthogonalization(int s, int n, double **result);
 	
 	printf("请输入向量个数S:");
 	scanf("%d",&s);
@@ -34,6 +35,7 @@ void main()
 	for(i=0;i<s;i++)
 	{
 		array[i]=(double*)malloc(n*sizeof(double));
+		printf("请输入第%d个向量:",i+1);
 		for(j=0;j<n;j++)
 		{
 			scanf("%lf",*(array+i)+j);
@@ -41,39 +43,33 @@ void main()
 		}
 	}
 
-	printf("1:\n");
+	printf("输入向量行矩阵:\n");
 	printfDouble2Dimension(s,n,array);
-	printf("2:\n");
+	printf("输入向量列矩阵:\n");
 	printfDouble2Dimension(n,s,deterArray);
 
 	primaryRowChange(n,s,deterArray);
 	
-	printf("2:\n");
+	printf("列矩阵初等行变换后:\n");
 	printfDouble2Dimension(n,s,deterArray);
 
 	groupNum = getGreatLinerlyIndependentGroup(n,s,deterArray,groupPosition);
 
-	printf("极大线性无关组:\n");
-	printfInt1Dimension(s,groupPosition);
-
-	groupArray= (double**)malloc(groupNum*sizeof(double*));
 	result = (double**)malloc(groupNum*sizeof(double*));
 	for(i=0;i<groupNum;i++)
 	{
 		if(*(groupPosition+i)!=-1)
 		{
-			groupArray[i] = (double*)malloc(n*sizeof(double));
 			result[i] = (double*)malloc(n*sizeof(double));
-			groupArray[i] = *(array+ *(groupPosition+i));
 			result[i] = *(array+ *(groupPosition+i));
 		}
 	}
+	printf("极大线性无关组:\n");
+	printfDouble2Dimension(groupNum,n,result);
 
-	printfDouble2Dimension(groupNum,n,groupArray);
-
-	calcOrthogonalization(groupNum,n,groupArray,result);
+	calcOrthogonalization(groupNum,n,result);
 	
-	printf("正交向量组:\n");
+	printf("等价正交单位向量组:\n");
 	printfDouble2Dimension(groupNum,n,result);
 
 	system("pause");
@@ -144,11 +140,12 @@ int getGreatLinerlyIndependentGroup(int s, int n, double **array, int *result)
 	return num;
 }
 
-//计算正交向量组
-void calcOrthogonalization(int s, int n, double **array, double **result)
+//计算正交单位向量组
+void calcOrthogonalization(int s, int n, double **result)
 {
 	int i,j,k;
 	double **tempArray ,temp;
+	double sqrt(double x);
 	double getInnerProduct(int n,double *array1, double *array2);
 	for(i=0;i<s;i++)
 	{
@@ -156,7 +153,7 @@ void calcOrthogonalization(int s, int n, double **array, double **result)
 		for(j=0;j<i;j++)
 		{
 			tempArray[j] = (double*)malloc(n*sizeof(double));
-			temp = getInnerProduct(n,*(array+i),*(result+j)) / getInnerProduct(n,*(result+j),*(result+j));
+			temp = getInnerProduct(n,*(result+i),*(result+j)) / getInnerProduct(n,*(result+j),*(result+j));
 			for(k=0;k<n;k++)
 			{
 				*(*(tempArray+j)+k) = temp * *(*(result+j)+k);
@@ -165,7 +162,17 @@ void calcOrthogonalization(int s, int n, double **array, double **result)
 		for(j=0;j<i;j++)
 		{
 			for(k=0;k<n;k++)
-				*(*(array+i)+k) -= *(*(tempArray+j)+k);
+				*(*(result+i)+k) -= *(*(tempArray+j)+k);
+		}
+	}
+	//单位化
+	for(i=0;i<s;i++)
+	{
+		temp = getInnerProduct(n,*(result+i),*(result+i));
+		temp = sqrt(temp);
+		for(j=0;j<n;j++)
+		{
+			*(*(result+i)+j) /= temp;
 		}
 	}
 }
@@ -192,7 +199,6 @@ void printfDouble2Dimension(int s, int n, double **array)
 		printf("\n");
 	}
 }
-
 
 void printfInt1Dimension(int n, int *array)
 {
