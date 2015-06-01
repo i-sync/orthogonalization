@@ -4,8 +4,8 @@
 void main()
 {
 	int i,j,k;
-	int s,n;//s¸önÎ¬ÏòÁ¿×é
-	int groupNum=0;//¼«´óÏßĞÔÎŞ¹Ø×é¸öÊı
+	int s,n;//sä¸ªnç»´å‘é‡ç»„
+	int groupNum=0;//æå¤§çº¿æ€§æ— å…³ç»„ä¸ªæ•°
 	double **array,**deterArray;
 	double **groupArray,**result;
 	int *groupPosition;
@@ -16,9 +16,9 @@ void main()
 	int getGreatLinerlyIndependentGroup(int s, int n, double **array, int *result);
 	void calcOrthogonalization(int s, int n, double **array, double **result);
 	
-	printf("ÇëÊäÈëÏòÁ¿¸öÊıS:");
+	printf("è¯·è¾“å…¥å‘é‡ä¸ªæ•°S:");
 	scanf("%d",&s);
-	printf("ÇëÊäÈëÏòÁ¿Î¬¶ÈN:");
+	printf("è¯·è¾“å…¥å‘é‡ç»´åº¦N:");
 	scanf("%d",&n);
 	array=(double**)malloc(s*sizeof(double*));
 	deterArray=(double**)malloc(n*sizeof(double*));
@@ -53,7 +53,7 @@ void main()
 
 	groupNum = getGreatLinerlyIndependentGroup(n,s,deterArray,groupPosition);
 
-	printf("¼«´óÏßĞÔÎŞ¹Ø×é:\n");
+	printf("æå¤§çº¿æ€§æ— å…³ç»„:\n");
 	printfInt1Dimension(s,groupPosition);
 
 	groupArray= (double**)malloc(groupNum*sizeof(double*));
@@ -73,26 +73,26 @@ void main()
 
 	calcOrthogonalization(groupNum,n,groupArray,result);
 	
-	printf("Õı½»ÏòÁ¿×é:\n");
+	printf("æ­£äº¤å‘é‡ç»„:\n");
 	printfDouble2Dimension(groupNum,n,result);
 
 	system("pause");
 }
-//³õµÈĞĞ±ä»»
+//åˆç­‰è¡Œå˜æ¢
 void primaryRowChange(int s, int n, double **array)
 {
 	int i,j,k,ii,kk,flag;
 	double temp;
-	for(i=0,j=0;i<s-1;i++,j++)//sĞĞ£¬×îÍâÎ§Ö»ĞèÒª±ä»»s-1
+	for(i=0,j=0;i<s-1;i++,j++)//sè¡Œï¼Œæœ€å¤–å›´åªéœ€è¦å˜æ¢s-1
 	{		
 		ii=i;
-		//Èç¹ûĞĞµÄÊ×ÔªÎª0£¬ÏòÏÂ²éÕÒÒ»¸ö²»Îª0µÄ£¬È»ºó»»ĞĞ
+		//å¦‚æœè¡Œçš„é¦–å…ƒä¸º0ï¼Œå‘ä¸‹æŸ¥æ‰¾ä¸€ä¸ªä¸ä¸º0çš„ï¼Œç„¶åæ¢è¡Œ
 		if(*(*(array+i)+j) == 0)
 		{
 			flag=0;
 			for(k=i+1;k<s;k++)
 			{
-				if(*(*(array+k)+j)!=0)//µÚkĞĞÓëµÚiĞĞ½»»»
+				if(*(*(array+k)+j)!=0)//ç¬¬kè¡Œä¸ç¬¬iè¡Œäº¤æ¢
 				{
 					for(kk=j;kk<n;kk++)
 					{	
@@ -104,7 +104,7 @@ void primaryRowChange(int s, int n, double **array)
 					break;
 				}
 			}		
-			//ÅĞ¶ÏÊÇ½»»»³É¹¦£¬Èç¹ûÃ»ÓĞ³É¹¦£¬Ôòi--
+			//åˆ¤æ–­æ˜¯äº¤æ¢æˆåŠŸï¼Œå¦‚æœæ²¡æœ‰æˆåŠŸï¼Œåˆ™i--
 			if(!flag)
 			{				
 				i--;
@@ -126,7 +126,7 @@ void primaryRowChange(int s, int n, double **array)
 	}
 }
 
-//»ñÈ¡¼«´óÏßĞÔÎŞ¹Ø×éÎ»ÖÃ¼°¸öÊı
+//è·å–æå¤§çº¿æ€§æ— å…³ç»„ä½ç½®åŠä¸ªæ•°
 int getGreatLinerlyIndependentGroup(int s, int n, double **array, int *result)
 {
 	int i,j,num=0;
@@ -144,7 +144,7 @@ int getGreatLinerlyIndependentGroup(int s, int n, double **array, int *result)
 	return num;
 }
 
-//¼ÆËãÕı½»ÏòÁ¿×é
+//è®¡ç®—æ­£äº¤å‘é‡ç»„
 void calcOrthogonalization(int s, int n, double **array, double **result)
 {
 	int i,j,k;
@@ -170,7 +170,7 @@ void calcOrthogonalization(int s, int n, double **array, double **result)
 	}
 }
 
-//¼ÆËãÁ½¸öÏòÁ¿µÄÄÚ»ı
+//è®¡ç®—ä¸¤ä¸ªå‘é‡çš„å†…ç§¯
 double getInnerProduct(int n, double *array1, double *array2)
 {
 	int i;
